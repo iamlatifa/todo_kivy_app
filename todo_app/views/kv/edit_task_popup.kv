@@ -1,0 +1,63 @@
+# edit_task_view.kv
+<EditTaskPopup>:
+    orientation: "vertical"
+    spacing: "12dp"
+    padding: "16dp"
+    size_hint_y: None
+    height: "320dp"  # Set a fixed height to ensure all content is visible
+
+    MDTextField:
+        id: task_title_input
+        hint_text: "Title"
+        mode: "rectangle"
+        helper_text: "Task title"
+        helper_text_mode: "on_focus"
+
+    MDTextField:
+        id: task_description_input
+        hint_text: "Description"
+        mode: "rectangle"
+        multiline: True
+        helper_text: "Task description"
+        helper_text_mode: "on_focus"
+
+    MDTextField:
+        id: task_due_date_input
+        hint_text: "Due Date (YYYY-MM-DD)"
+        mode: "rectangle"
+        helper_text: "Format: YYYY-MM-DD"
+        helper_text_mode: "on_focus"
+
+    MDLabel:
+        text: "Priority"
+        theme_text_color: "Secondary"
+        halign: "left"
+        size_hint_y: None
+        height: self.texture_size[1]
+        padding_y: "8dp"
+
+    MDBoxLayout:
+        spacing: "8dp"
+        adaptive_height: True
+        size_hint_y: None
+        height: "48dp"
+
+        MDFlatButton:
+            id: btn_low
+            text: "Low"
+            on_release: root.set_priority("Low")
+
+        MDFlatButton:
+            id: btn_medium
+            text: "Medium"
+            on_release: root.set_priority("Medium")
+
+        MDFlatButton:
+            id: btn_high
+            text: "High"
+            on_release: root.set_priority("High")
+
+        MDFlatButton:
+            id: btn_urgent
+            text: "Urgent"
+            on_release: root.set_priority("Urgent")

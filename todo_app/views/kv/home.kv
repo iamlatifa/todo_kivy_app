@@ -1,0 +1,87 @@
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import MDRaisedButton kivymd.uix.button.MDRaisedButton
+#:import MDLabel kivymd.uix.label.MDLabel
+#:import MDCard kivymd.uix.card.MDCard
+#:import MDGridLayout kivymd.uix.gridlayout.MDGridLayout
+#:import MDScrollView kivymd.uix.scrollview.MDScrollView
+#:import MDScreen kivymd.uix.screen.MDScreen
+#:import MDScreenManager kivymd.uix.screenmanager.MDScreenManager
+
+
+<IconButton@ButtonBehavior+Image>:
+    size_hint: None, None
+    size: dp(30), dp(30)
+    source: ""
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+<HomeView>:
+    name: 'home'
+
+    FloatLayout:
+        # Sidebar Overlay (defined first)
+         
+
+
+        # Main Content (drawn above the sidebar when sidebar is hidden)
+        MDBoxLayout:
+            id: main_content
+            orientation: 'vertical'
+            size_hint: 1, 1
+            pos_hint: {'x': 0, 'y': 0}
+            padding: '15dp'
+            spacing: '10dp'
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # Top bar
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: '56dp'
+                spacing: '10dp'
+
+                IconButton:
+                    source: 'assets/images/menu.png'
+                    on_release: root.toggle_sidebar()
+
+
+                MDLabel:
+                    text: 'My Tasks'
+                    font_style: 'H6'
+                    halign: 'center'
+
+                MDRaisedButton:
+                    text: 'Add Task'
+                    size_hint: None, None
+                    size: '100dp', '36dp'
+                    on_release: root.on_add_task_press()
+
+            MDScrollView:
+                MDBoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                    DropContainer:
+                        id: tasks_container
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+
+
+
+        SidebarView:
+            id: sidebar
+            size_hint: None, 1
+            width: 250
+            x: -250  # hidden by default
+            pos: self.x, self.y 

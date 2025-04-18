@@ -1,0 +1,81 @@
+<AddTaskView>:
+    name: "add_task"
+    MDFloatLayout:
+        #orientation: "vertical"
+        #padding: dp(20)
+        #spacing: dp(15)
+
+        ScrollView:
+            size_hint: 1,1
+
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(20)
+                spacing: dp(20)
+
+                size_hint_y: None
+                height: self.minimum_height
+                pos_hint: {"center_x": 0.5}
+
+                MDLabel:
+                    text: "New Task"
+                    theme_text_color: "Primary"
+                    font_size: "24sp"
+                    bold: True
+                    halign: "center"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: title_input
+                    hint_text: "Title"
+                    multiline: False
+                    size_hint_y: None
+                    height: dp(50)
+                    
+
+                MDTextField:
+                    id: description_input
+                    hint_text: "Description"
+                    multiline: True
+                    size_hint_y: None
+                    height: dp(100)
+
+                MDTextField:
+                    id: priority_input
+                    hint_text: "Select Priority"
+                    mode: "rectangle"
+                    readonly: True
+                    on_focus: if self.focus: root.open_priority_menu()
+
+
+                MDTextField:
+                    id: due_date_input
+                    hint_text: "Due Date (YYYY-MM-DD)"
+                    multiline: False
+                    size_hint_y: None
+                    height: dp(50)
+                    on_focus: 
+                        if self.focus: root.open_date_picker()  # Open the date picker when this field gets focus
+
+
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(50)
+                    spacing: dp(10)
+
+                    MDRaisedButton:
+                        text: "Cancel"
+                        size_hint_x: None
+                        width: dp(150)
+                        on_release:
+                            root.manager.current = "home"
+
+                    MDRaisedButton:
+                        text: "Save"
+                        size_hint_x: None
+                        width: dp(150)
+                        on_release:
+                            root.controller.save_task()

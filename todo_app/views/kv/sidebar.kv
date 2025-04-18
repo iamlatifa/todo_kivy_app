@@ -1,0 +1,65 @@
+<SidebarView>:
+    size_hint: None, 1
+    width: 0
+    x: -250  # hide off-screen initially
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, 1
+        padding: dp(10)
+        spacing: dp(10)
+        md_bg_color: 0.95, 0.95, 1, 1
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: dp(40)
+
+            MDIconButton:
+                icon: "close"
+                on_release: root.close_sidebar()
+
+            #Widget:  # optional, keeps alignment for future elements
+
+        MDLabel:
+            text: "Sidebar"
+            font_style: "H6"
+            halign: "center"
+            size_hint_y: None
+            height: "60dp"
+            theme_text_color: "Custom"
+            text_color: 0.25, 0.25, 0.25, 1
+
+        Image:
+            source: 'assets/images/profile.png'
+            size_hint_y: None
+            size: (80, 80)
+
+        MDLabel:
+            text: root.username
+            theme_text_color: "Custom"
+            text_color: 0.25, 0.25, 0.25, 1 
+            size_hint_y: None
+            height: 30
+            font_size: 16
+
+        Button:
+            text: 'Home'
+            size_hint_y: None
+            height: 40
+            on_release: root.on_nav_press('home')
+
+        Button:
+            text: 'My Profile'
+            size_hint_y: None
+            height: 40
+            on_release: root.on_nav_press('profile')
+
+        Widget:
+
+        Button:
+            text: 'Logout'
+            size_hint_y: None
+            height: 40
+            background_color: (1, 0.3, 0.3, 1)
+            on_release: root.on_logout_press()
