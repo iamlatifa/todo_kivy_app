@@ -7,7 +7,7 @@ services:
     startCommand: "gunicorn wsgi:app"
     envVars:
       - key: DB_HOST
-        value: your-db-host
+        value: 50.6.153.0
       - key: DB_USER
         value: asplcemy_Us_Latifa
       - key: DB_PASSWORD
