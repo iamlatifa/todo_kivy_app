@@ -1,0 +1,21 @@
+<ProfileScreen>:
+    name: 'profile'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
+        MDLabel:
+            text: "My Profile"
+            font_style: "H4"
+            halign: "center"
+
+        MDLabel:
+            text: "Username: " + root.username
+            halign: "left"
+
+        Button:
+            text: "Edit Profile"
+            size_hint_y: None
+            height: dp(40)
+            on_release: print("Edit Profile clicked")

@@ -9,12 +9,12 @@ class User:
 
     @classmethod
     #create user object from directory data
-    def from_dict(cls, data_tuple):
+    def from_dict(cls, data_dict):
         return cls(
-            id=data_tuple[0],
-            username=data_tuple[1],
-            password=data_tuple[2],
-            created_at=data_tuple[3],
+            id=data_dict.get('id'),
+            username=data_dict.get('username'),
+            email=data_dict.get('email'),
+            created_at=data_dict.get('created_at')
         )
 
         

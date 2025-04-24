@@ -32,3 +32,8 @@ class LoginView(Screen):
     def set_error(self, message):
         """Update error message (called by controller)"""
         self.error_message = message
+
+    def clear_fields(self):
+        self.ids.username_input.text = ""
+        self.ids.password_input.text = ""
+        self.error_message = ""

@@ -1,0 +1,14 @@
+todo_env/ 
+# Python cache
+**/__pycache__/
+*.py[cod]
+
+# Environment files
+.env
+
+# Local data
+user_session.json
+
+# OS-specific
+.DS_Store
+Thumbs.db

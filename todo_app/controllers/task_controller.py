@@ -1,91 +1,117 @@
-from services.task_service import TaskService
-from services.database import Database
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
 from views.widgets.task_item import TaskItemView
-from kivy.app import App
 
 class TaskController:
-    """Controller for handling task-related operations"""
-
-    def __init__(self, app, home_view, model=None, current_filter='active'):
+    def __init__(self, app, home_view, api_service):
         self.app = app
         self.home_view = home_view
-        self.model = model if model else Database()
+        self.model = api_service  # ApiService instance
         self.home_view.controller = self
-        self.task_service = TaskService()
-        self.current_filter = current_filter
-        self.task_widgets = []  # Stores currently loaded task widgets
+        self.current_filter = None
+
+    def add_task(self, title, description, due_date, priority):
+        """Add a new task using ApiService"""
+        if not self.app.current_user:
+            print("User not logged in.")
+            return
+
+        data = {
+            'title': title,
+            'description': description,
+            'due_date': due_date,
+            'priority': priority,
+            'user_id': self.app.current_user.id,
+            'completed': False
+        }
+
+        result = self.model.add_task(data)
+        if result:
+            self.load_tasks()
+        else:
+            print("Failed to add task.")
+
+    def save_task(self):
+        """Collect task data from UI and send it to API"""
+        title = self.screen.ids.title_input.text
+        description = self.screen.ids.description_input.text
+        due_date = self.screen.ids.due_date_input.text
+        priority_text = self.screen.ids.priority_input.text
+
+        if not title.strip():
+            print("Title is required.")
+            return
+
+        priority_map = {
+            "Low": 0, "Medium": 1, "High": 2, "Urgent": 3
+        }
+
+        priority = priority_map.get(priority_text, 0)
+
+        self.add_task(title, description, due_date, priority)
 
     def load_tasks(self):
-        """Load tasks from database and update view"""
+        """Load tasks for the current user via ApiService"""
         if not self.app.current_user:
             return
 
-        self.home_view.clear_tasks()
-        self.task_widgets = []
-
         user_id = self.app.current_user.id
-        tasks = self.task_service.get_tasks_by_user_and_filter(self.model, user_id, self.current_filter)
+        completed = (
+            True if self.current_filter == "completed" else
+            False if self.current_filter == "active" else
+            None
+        )
+
+        tasks = self.model.get_tasks(user_id=user_id, completed=completed)
+
+        self.home_view.clear_tasks()
 
         if not tasks:
             self.home_view.show_empty_message()
+            return
+
+        for task in tasks:
+            task_widget = TaskItemView(
+                task_id=task['id'],
+                title=task['title'],
+                description=task.get('description', ''),
+                priority=task.get('priority', 0),
+                completed=bool(task.get('completed', 0)),
+                due_date=task.get('due_date', ''),
+                controller=self
+            )
+            self.home_view.add_task_widget(task_widget)
+
+    def toggle_task_completion(self, task_id, completed):
+        """Toggle completion status via ApiService"""
+        result = self.model.update_task_completion(task_id, completed)
+        if result:
+            self.load_tasks()
         else:
-            for task in tasks:
-                task_widget = TaskItemView(
-                    task_id=task.id,
-                    title=task.title,
-                    description=task.description,
-                    due_date=task.due_date,
-                    priority=str(task.priority),
-                    completed=task.completed,
-                    controller=self
-                )
-                self.home_view.add_task_widget(task_widget)
-                self.task_widgets.append(task_widget)
+            print("Error updating task completion.")
 
-    def add_new_task(self):
-        self.app.screen_manager.current = "add_task"
-
-    def toggle_task_completion(self, task_id, value):
-        self.model.update_task_completion(task_id, value)
-        print(f"Task {task_id} marked as {'completed' if value else 'incomplete'}")
-
-    def on_task_reordered(self):
-        task_order = [child.task_id for child in self.home_view.ids.tasks_container.children[::-1]]
-        self.model.save_task_order(task_order)
-
-    def update_task(self, task_id, **task_data):
-        """Update a task in the database and reflect changes in the UI"""
-        # Update task in database
-        self.model.update_task(
-            task_id=task_id,
-            title=task_data.get("title"),
-            description=task_data.get("description"),
-            due_date=task_data.get("due_date"),
-            priority=task_data.get("priority", "Low")
-        )
-
-        # Find and update the widget in-place
-        for widget in self.task_widgets:
-            if widget.task_id == task_id:
-                widget.title = task_data.get("title", "")
-                widget.description = task_data.get("description", "")
-                widget.due_date = task_data.get("due_date", "")
-                widget.priority = task_data.get("priority", "Low")
-
-                # Update the UI labels if they exist
-                if 'title_label' in widget.ids:
-                    widget.ids.title_label.text = widget.title
-                if 'description_label' in widget.ids:
-                    widget.ids.description_label.text = widget.description
-                if 'due_date_label' in widget.ids:
-                    widget.ids.due_date_label.text = f"Due: {widget.due_date}"
-                if 'priority_label' in widget.ids:
-                    widget.ids.priority_label.text = widget.priority
-
-                print(f"Updated task {task_id} in UI")
-                break
+    def delete_task(self, task_id):
+        """Delete a task via ApiService"""
+        if self.model.delete_task(task_id):
+            self.load_tasks()
         else:
-            print(f"Warning: Task widget for ID {task_id} not found in task_widgets.")
+            print("Error deleting task.")
 
-        print(f"Task {task_id} updated")
+    def update_task(self, task_id, title, description, due_date, priority):
+        """Update a task using ApiService"""
+        data = {
+            'title': title,
+            'description': description,
+            'due_date': due_date,
+            'priority': priority
+        }
+        result = self.model.update_task(task_id, data)
+        if result:
+            self.load_tasks()
+        else:
+            print("Failed to update task.")
 
+    def filter_tasks(self, filter_type):
+        """Filter tasks: all, active, or completed"""
+        self.current_filter = None if filter_type == "all" else filter_type
+        self.load_tasks()

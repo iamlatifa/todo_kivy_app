@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: todo-api
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn wsgi:app"
+    envVars:
+      - key: DB_HOST
+        value: your-db-host
+      - key: DB_USER
+        value: asplcemy_Us_Latifa
+      - key: DB_PASSWORD
+        sync: false
+        value: Latifa@2324
+      - key: DB_NAME
+        value: asplcemy_Latifa

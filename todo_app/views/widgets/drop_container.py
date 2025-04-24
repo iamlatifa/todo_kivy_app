@@ -24,7 +24,6 @@ class DropContainer(BoxLayout):
                 inserted = True
                 break
 
-
         if not inserted:
             self.add_widget(widget)
 

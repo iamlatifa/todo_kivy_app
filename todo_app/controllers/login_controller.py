@@ -1,37 +1,32 @@
-import json
-import re
-
-SESSION_FILE = "user_session.json"
-
 class LoginController:
-    """Controller for handling login logic"""
-    
+    """Controller for handling login logic."""
+
     def __init__(self, app, view):
         self.app = app
         self.view = view
+        self.api = app.api  # Instance of ApiService
         self.view.controller = self
-    
-    def login(self, username, password):
-        """Process login attempt"""
-        if not username or not password:
-            self.view.set_error("Username and password are required")
-            return
-        
-        # Check credentials against database
-        user = self.app.db.get_user_by_credentials(username, password)
-        
-        if user:
-            self.view.set_error("")
-            self.save_session(user[0])
-            self.app.login_user(user)
-        else:
-            self.view.set_error("Invalid username or password")
-    
-    def save_session(self, user_id):
-        with open(SESSION_FILE, "w") as f:
-            json.dump({"user_id": user_id}, f)
 
+    def login(self, username, password):
+        """Attempt login through ApiService"""
+        if not username.strip() or not password.strip():
+            self.view.set_error("Please fill in all fields.")
+            return
+
+        response = self.api.login(username, password)
+
+        if not response:
+            self.view.set_error("No response from server.")
+            return
+
+        if "error" in response:
+            self.view.set_error(response["error"])
+            return
+
+        # Login successful
+        self.view.clear_fields()
+        self.app.login_user(response)
 
     def navigate_to_signup(self):
-        """Navigate to signup screen"""
+        """Navigate to the signup screen"""
         self.app.navigate_to('signup')

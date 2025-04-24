@@ -13,7 +13,7 @@ class SignupView(Screen):
             username = self.ids.username_input.text.strip()
             email = self.ids.email_input.text.strip()
             password = self.ids.password_input.text.strip()
-            confirm_password = self.ids.password_input.text.strip()
+            confirm_password = self.ids.password_confirm.text.strip()
             self.controller.register(username, email, password, confirm_password)
 
     #Navigate to login screen
@@ -25,3 +25,10 @@ class SignupView(Screen):
     def set_error(self, message):
         """Update error message (called by controller)"""
         self.error_message = message
+
+    def clear_fields(self):
+        self.ids.username_input.text = ""
+        self.ids.email_input.text = ""
+        self.ids.password_input.text = ""
+        self.ids.password_confirm.text = ""
+        self.error_message = ""
