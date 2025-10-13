@@ -1,0 +1,94 @@
+<SignupScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)  # Adjusted spacing for better distribution
+        size_hint: None, None
+        width: dp(320)
+        height: self.minimum_height
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        MDLabel:
+            text: "Sign Up"
+            halign: 'center'
+            font_style: 'H4'
+            theme_text_color: 'Primary'
+            size_hint_y: None
+            height: self.texture_size[1]  # Adjusts based on label text height
+
+        MDTextField:
+            id: username
+            hint_text: "Username"
+            mode: 'rectangle'
+            line_color_normal: (0.8, 0.85, 0.9, 1)
+            line_color_focus: (0.26, 0.65, 0.96, 1)
+            icon_left: "account"
+            icon_left_color: app.theme_cls.primary_color
+            padding: [dp(10), dp(10)]
+            size_hint_y: None
+            height: dp(48)  # Set height for uniform text field sizes
+
+        MDTextField:
+            id: email
+            hint_text: "Email"
+            mode: 'rectangle'
+            line_color_normal: (0.8, 0.85, 0.9, 1)
+            line_color_focus: (0.26, 0.65, 0.96, 1)
+            icon_left: "email"
+            icon_left_color: app.theme_cls.primary_color
+            padding: [dp(10), dp(10)]
+            size_hint_y: None
+            height: dp(48)  # Set height for uniform text field sizes
+
+        MDTextField:
+            id: password
+            hint_text: "Password"
+            password: True
+            mode: 'rectangle'
+            line_color_normal: (0.8, 0.85, 0.9, 1)
+            line_color_focus: (0.26, 0.65, 0.96, 1)
+            icon_left: "lock"
+            icon_left_color: app.theme_cls.primary_color
+            padding: [dp(10), dp(10)]
+            size_hint_y: None
+            height: dp(48)  # Set height for uniform text field sizes
+
+        MDTextField:
+            id: confirm_password
+            hint_text: "Confirm Password"
+            password: True
+            mode: 'rectangle'
+            line_color_normal: (0.8, 0.85, 0.9, 1)
+            line_color_focus: (0.26, 0.65, 0.96, 1)
+            icon_left: "lock"
+            icon_left_color: app.theme_cls.primary_color
+            padding: [dp(10), dp(10)]
+            size_hint_y: None
+            height: dp(48)  # Set height for uniform text field sizes
+
+        MDRaisedButton:
+            text: "Sign Up"
+            md_bg_color: (0.26, 0.65, 0.96, 1)
+            text_color: (1, 1, 1, 1)
+            on_release: root.signup()
+            size_hint_x: None
+            width: dp(200)  # Set width for uniform button size
+            size_hint_y: None
+            height: dp(48)  # Button height
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(5)
+            size_hint_y: None
+            height: dp(30)
+            pos_hint: {'center_x': 0.5}
+
+            MDLabel:
+                text: "Already have an account?"
+                theme_text_color: 'Secondary'
+                font_style: 'Body2'
+
+            MDTextButton:
+                text: "Login"
+                text_color: (0.18, 0.52, 0.88, 1)
+                on_release: root.go_to_login()

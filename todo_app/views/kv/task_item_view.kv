@@ -1,117 +1,93 @@
-<TaskItemView@BoxLayout>:
-    orientation: "horizontal"
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+<TaskItemView>:
     size_hint_y: None
-    height: 120
-    padding: "12dp"
-    spacing: "8dp"
-    
-    # Task properties
-    task_id: ""
-    title: ""
-    due_date: ""
-    priority: "Low"
-    completed: False
-    controller: None
+    height: dp(100)
+    padding: dp(12)
+    spacing: dp(8)
+    radius: [dp(12)]
+    elevation: 2
+    ripple_behavior: True
+    md_bg_color: root.background_color
 
     canvas.before:
         Color:
-            rgba: {'Low': (0.9, 0.97, 1, 1), 'Medium': (1, 0.9, 0.4, 1), 'High': (1, 0.7, 0.6, 1), 'Urgent': (0.9, 0.3, 0.3, 1)}.get(root.priority, (0.9, 0.9, 0.9, 1))
+            rgba: root.background_color if root.background_color else (1, 1, 1, 1)
         RoundedRectangle:
             pos: self.pos
             size: self.size
-            radius: [16]
+            radius: [dp(12)]
 
-    # Checkbox
-    CheckBox:
-        size_hint_x: None
-        width: "40dp"
-        size_hint_y: None
-        #height: "40dp"
-        pos_hint: {'center_y': 0.5}
-        active: root.completed
-        on_active: root.on_checkbox_active(self, self.active)
-        color: [0.2, 0.6, 1, 1]
-
-    # Middle content
     BoxLayout:
-        orientation: 'vertical'
-        spacing: '6dp'
+        orientation: "horizontal"
+        spacing: dp(10)
+        padding: 0
 
-        BoxLayout:
-            size_hint_y: None
-            height: "30dp"
+        MDCheckbox:
+            active: root.completed
+            on_active: root.on_checkbox_active(*args)
+            size_hint: None, None
+            size: dp(28), dp(28)
+            pos_hint: {"center_y": 0.5}
+
+        # --- Task Info ---
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(4)
+            padding: [0, dp(6), 0, 0]
 
             MDLabel:
-                id: title_label
                 text: root.title
+                font_name: "assets/fonts/static/Cairo-Regular.ttf"
                 font_style: "Subtitle1"
-                theme_text_color: "Custom"
-                text_color: 0.2, 0.2, 0.2, 1
-                text_size: self.width, None
-                halign: 'left'
-                valign: 'middle'
+                bold: True
                 shorten: True
-                shorten_from: 'right'
-
-        BoxLayout:
-            size_hint_y: None
-            height: "20dp"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#1E293B")
+                halign: "left"
 
             MDLabel:
-                id: due_label
-                text: f"Due: {root.due_date}"
+                text: root.description
+                font_name: "assets/fonts/static/Cairo-Regular.ttf"
+                font_style: "Body2"
+                shorten: True
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#F1F5F9")
+                halign: "left"
+
+            MDLabel:
+                text: root.due_date if root.due_date else ""
+                font_name: "assets/fonts/static/Cairo-Regular.ttf"
                 font_style: "Caption"
                 theme_text_color: "Custom"
-                text_color: 0.3, 0.3, 0.5, 1
-                text_size: self.width, None
-                halign: 'left'
-                valign: 'middle'
+                text_color: get_color_from_hex("#F8FAFC")
+                halign: "left"
 
-    # Right side buttons and priority
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_x: None
-        width: "80dp"
-        spacing: 8
+        # --- Icons Section ---
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "center"
+            size_hint_x: None
+            width: dp(60)
 
-        MDLabel:
-            id: priority_label
-            text: root.priority
-            font_style: "Caption"
-            theme_text_color: "Custom"
-            text_color: 1, 1, 1, 1
-            size_hint_y: None
-            height: "30dp"
-            halign: "center"
-            valign: "middle"
-            canvas.before:
-                Color:
-                    rgba: {'Low': (0.2, 0.6, 1, 0.9), 'Medium': (0.95, 0.7, 0.1, 0.9), 'High': (0.9, 0.3, 0.2, 0.9), 'Urgent': (0.7, 0, 0, 0.9)}.get(root.priority, (0.5, 0.5, 0.5, 0.9))
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [8]
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint: None, None
+                size: dp(48), dp(80)
+                spacing: dp(4)
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: None
-            height: "40dp"
-            spacing: 4
+                MDIconButton:
+                    icon: "pencil"
+                    on_release: root.open_edit_screen()
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#1E293B")
+                    size_hint_y: None
+                    height: dp(36)
 
-            # Edit button
-            MDIconButton:
-                icon: "pencil"
-                theme_text_color: "Custom"
-                text_color: 0.2, 0.6, 1, 1
-                pos_hint: {'center_y': 0.5}
-                on_release: root.open_edit_popup()
-                size_hint_x: 0.5
-
-            # Delete button
-            MDIconButton:
-                icon: "trash-can-outline"
-                theme_text_color: "Custom"
-                text_color: 0.95, 0.3, 0.3, 1
-                pos_hint: {'center_y': 0.5}
-                on_release: root.delete_self()
-                size_hint_x: 0.5
+                MDIconButton:
+                    icon: "delete"
+                    on_release: root.confirm_and_delete_task()
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#1E293B")
+                    size_hint_y: None
+                    height: dp(36)

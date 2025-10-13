@@ -1,0 +1,226 @@
+#:kivy 2.0.0
+#:import MDTopAppBar kivymd.uix.toolbar.MDTopAppBar
+
+<ProfileScreen>:
+    name: "profile"
+    MDBoxLayout:
+        id: profile_layout
+        orientation: 'vertical'
+        pos_hint: {'top': 1}
+        size_hint: 1, 1
+
+        MDTopAppBar:
+            title: "My Profile"
+            md_bg_color: get_color_from_hex("#2563EB")
+            anchor_title: "left"
+            left_action_items: [["arrow-left", lambda x: root.go_back()]]
+            elevation: 2
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(20)
+            padding: [dp(16), dp(24), dp(16), dp(16)]
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(200)
+                spacing: dp(9)
+                pos_hint: {'center_x': 0.5}
+
+                MDCard:
+                    size_hint: None, None
+                    size: dp(100), dp(100)
+                    pos_hint: {'center_x': 0.5}
+                    radius: [dp(60)]
+                    elevation: 1
+                    padding: dp(5)
+                    md_bg_color: app.theme_cls.primary_light
+
+                    FitImage:
+                        source: root.profile_image
+                        radius: [dp(55)]
+
+                MDLabel:
+                    id: username_field
+                    text: root.username
+                    pos_hint: {'center_x': 0.5}
+                    size_hint_x: 0.8
+                    theme_text_color: "Secondary"
+                    halign: "center"
+                    font_style: "H5"
+
+                MDLabel:
+                    id: email_field
+                    text: root.email
+                    pos_hint: {'center_x': 0.5}
+                    size_hint_x: 0.8
+                    theme_text_color: "Secondary"
+                    halign: "center"
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                spacing: dp(16)
+                padding: [0, dp(16), 0, 0]
+                size_hint_y: None
+                height: dp(380)  # Sum of two cards height + spacing
+
+                MDCard:
+                    orientation: 'vertical'
+                    padding: dp(16)
+                    spacing: dp(8)
+                    elevation: 2
+                    size_hint_y: None
+                    height: dp(180)
+
+                    MDLabel:
+                        text: "Tasks"
+                        font_style: "H6"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        spacing: dp(6)
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(24)
+
+                            MDLabel:
+                                text: "Total Tasks :"
+                                theme_text_color: "Secondary"
+                                size_hint_x: 0.6
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                            MDLabel:
+                                id: total_tasks_label
+                                text: root.total_tasks
+                                theme_text_color: "Primary"
+                                size_hint_x: 0.4
+                                text_size: self.width, None
+                                halign: "right"
+                                valign: "middle"
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(24)
+
+                            MDLabel:
+                                text: "Completed :"
+                                theme_text_color: "Secondary"
+                                size_hint_x: 0.6
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                            MDLabel:
+                                id: completed_tasks_label
+                                text: root.completed_tasks
+                                theme_text_color: "Primary"
+                                size_hint_x: 0.4
+                                text_size: self.width, None
+                                halign: "right"
+                                valign: "middle"
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(24)
+
+                            MDLabel:
+                                text: "Pending :"
+                                theme_text_color: "Secondary"
+                                size_hint_x: 0.6
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                            MDLabel:
+                                id: pending_tasks_label
+                                text: root.pending_tasks
+                                theme_text_color: "Primary"
+                                size_hint_x: 0.4
+                                text_size: self.width, None
+                                halign: "right"
+                                valign: "middle"
+
+
+                MDCard:
+                    orientation: 'vertical'
+                    padding: dp(16)
+                    spacing: dp(8)
+                    elevation: 2
+                    size_hint_y: None
+                    height: dp(180)
+
+                    MDLabel:
+                        text: "Account"
+                        font_style: "H6"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        spacing: dp(9)
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(80)
+
+                            MDLabel:
+                                text: "Joined :"
+                                theme_text_color: "Secondary"
+                                size_hint_x: 0.5
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                            MDLabel:
+                                text: root.join_date
+                                theme_text_color: "Primary"
+                                size_hint_x: 0.5
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+                                shorten: True
+                                max_lines: 1
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: dp(30)
+
+                            MDLabel:
+                                text: "Completion Rate :"
+                                theme_text_color: "Secondary"
+                                size_hint_x: 0.5
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                            MDLabel:
+                                id: completion_rate_label
+                                text: root.task_completion_rate
+                                theme_text_color: "Primary"
+                                size_hint_x: 0.5
+                                text_size: self.width, None
+                                halign: "left"
+                                valign: "middle"
+
+                        MDProgressBar:
+                            id: completion_bar
+                            value: int(root.task_completion_rate.strip('%')) if root.task_completion_rate.endswith('%') else 0
+                            max: 100
+                            size_hint_y: None
+                            height: dp(6)

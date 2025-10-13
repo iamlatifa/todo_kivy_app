@@ -1,0 +1,97 @@
+<EditTaskScreen>:
+    name: "edit_task"
+    id: box_layout
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: "8dp"
+
+        MDTopAppBar:
+            title: "Edit Task"
+            elevation: 2
+            left_action_items: [["arrow-left", lambda x: root.cancel_edit()]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "24dp"
+                spacing: "24dp"
+                adaptive_height: True
+                size_hint_y: None
+
+                MDTextField:
+                    id: title_input
+                    hint_text: "Task Title"
+                    text: ""
+                    mode: "fill"  # removes underline
+                    line_color_normal: 0, 0, 0, 0
+                    line_color_focus: 0, 0, 0, 0
+                    text_color: app.theme_cls.primary_color
+                    font_size: "24sp"
+                    halign: "center"
+                    size_hint_x: 0.96
+                    pos_hint: {"center_x": 0.5}
+                    size_hint_y: None
+                    height: "48dp"
+                    background_color: 0, 0, 0, 0  # Transparent background
+                    foreground_color: 0, 0, 0, 1
+                    fill_color_normal: 0, 0, 0, 0
+                    fill_color_focus: 0, 0, 0, 0
+
+                MDCard:
+                    orientation: 'vertical'
+                    padding: "16dp"
+                    spacing: "18dp"
+                    radius: [10, 10, 10, 10]
+                    elevation: 1
+                    size_hint_x: 0.96
+                    size_hint_y: None
+                    height: self.minimum_height
+                    pos_hint: {"center_x": 0.5}
+                    md_bg_color: app.theme_cls.bg_light
+
+                    MDTextField:
+                        id: description_input
+                        hint_text: "Description"
+                        icon_right: "note-text"
+                        multiline: True
+                        size_hint_y: None
+                        height: "100dp"
+                        background_color: 0, 0, 0, 0
+                        on_text: root.update_field_colors()
+
+                    MDTextField:
+                        id: due_date_input
+                        hint_text: "Due Date"
+                        icon_right: "calendar-month"
+                        on_focus: if self.focus: root.open_date_picker()
+                        size_hint_y: None
+                        height: "56dp"
+                        background_color: 0, 0, 0, 0
+                        on_text: root.update_field_colors()
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: "8dp"
+                        size_hint_y: None
+                        height: "56dp"
+                        pos_hint: {"center_x": 0.5}
+                        size_hint_x: 0.96
+
+                        MDRaisedButton:
+                            id: priority_button
+                            text: "Select Priority"
+                            on_release: root.show_priority_menu()
+                            md_bg_color: 0.5, 0.5, 0.5, 1
+                            text_color: 1, 1, 1, 1
+                            size_hint_x: 1
+
+
+                MDRaisedButton:
+                    text: "Save Task"
+                    md_bg_color: app.theme_cls.primary_color
+                    text_color: 1, 1, 1, 1
+                    size_hint_x: None
+                    width: "200dp"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.save_task()

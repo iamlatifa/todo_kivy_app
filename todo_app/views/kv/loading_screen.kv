@@ -1,0 +1,29 @@
+<LoadingScreen>:
+    name: "loading"
+    MDFloatLayout:
+
+        MDCard:
+            size_hint: None, None
+            size: "300dp", "180dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            radius: [20, 20, 20, 20]
+            md_bg_color: app.theme_cls.bg_normal  # Matches app theme background
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "24dp"
+                spacing: "20dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                MDSpinner:
+                    size_hint: None, None
+                    size: "48dp", "48dp"
+                    pos_hint: {"center_x": 0.5}
+                    active: True
+                    color: app.theme_cls.primary_color
+
+                MDLabel:
+                    text: "Connecting to server..."
+                    halign: "center"
+                    theme_text_color: "Primary"
+                    font_style: "H6"

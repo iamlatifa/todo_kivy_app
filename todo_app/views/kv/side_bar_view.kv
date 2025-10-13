@@ -1,0 +1,120 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import MDCard kivymd.uix.card.MDCard
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import MDLabel kivymd.uix.label.MDLabel
+#:import OneLineIconListItem kivymd.uix.list.OneLineIconListItem
+#:import IconLeftWidget kivymd.uix.list.IconLeftWidget
+#:import MDList kivymd.uix.list.MDList
+#:import ScrollView kivy.uix.scrollview.ScrollView
+#:import dp kivy.metrics.dp
+
+<SidebarView>:
+    size_hint: None, 1
+    width: dp(260)
+    x: -self.width
+    orientation: 'vertical'
+    elevation: 12
+    spacing: dp(8)
+    canvas.before:
+        Color:
+            rgba: get_color_from_hex("#FFFFFF")  # Same as your md_bg_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    MDCard:
+        orientation: "vertical"
+        size_hint_y: None
+        height: dp(200)
+        padding: dp(16)
+        radius: [0, 0, dp(16), dp(16)]
+        md_bg_color: app.theme_cls.primary_light  
+        elevation: 0
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(32)
+
+            MDIconButton:
+                icon: "close"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#4A4C50")  # Dark warm blue
+                on_release: root.close_sidebar()
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(10)
+            padding: [0, dp(8), 0, 0]
+
+            FitImage:
+                source: 'assets/images/default_profile.png'
+                size_hint: None, None
+                size: dp(72), dp(72)
+                pos_hint: {"center_x": .5}
+                radius: [dp(36),]
+
+            MDLabel:
+                text: root.username if root.username else "User"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#0F172A")  # Dark warm blue
+                font_style: "Subtitle1"
+                halign: "center"
+                bold: True
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        bar_width: dp(4)
+        bar_color: get_color_from_hex("#8B6B4A")
+        bar_inactive_color: get_color_from_hex("#E6D5C3")
+        effect_cls: "ScrollEffect"
+
+        MDList:
+            spacing: dp(4)
+            padding: [dp(8), dp(4)]
+
+            OneLineIconListItem:
+                text: "Home"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#0F172A")  # Dark warm blue
+                on_release: 
+                    root.on_nav_press('home')
+                IconLeftWidget:
+                    icon: "home"
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#0F172A")  # Medium warm brown
+
+            OneLineIconListItem:
+                text: "Completed Tasks"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#0F172A")  # Dark warm blue
+                on_release: 
+                    root.on_nav_press('completed_tasks')
+                IconLeftWidget:
+                    icon: "check-circle"
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#0F172A")  # Dark warm blue
+
+            OneLineIconListItem:
+                text: "My Profile"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#0F172A")  # Dark warm blue
+                on_release: 
+                    root.on_nav_press('profile')
+                IconLeftWidget:
+                    icon: "account-circle"
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#0F172A")  # Medium warm blue
+
+            OneLineIconListItem:
+                text: "Logout"
+                theme_text_color: "Custom"
+                text_color: get_color_from_hex("#B82F27")  #  red
+                on_release: 
+                    root.on_logout_press()
+                IconLeftWidget:
+                    icon: "logout"
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#B82F27")  #  red

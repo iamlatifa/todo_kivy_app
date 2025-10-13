@@ -1,0 +1,77 @@
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import MDRaisedButton kivymd.uix.button.MDRaisedButton
+#:import MDLabel kivymd.uix.label.MDLabel
+#:import MDCard kivymd.uix.card.MDCard
+#:import MDGridLayout kivymd.uix.gridlayout.MDGridLayout
+#:import MDScrollView kivymd.uix.scrollview.MDScrollView
+#:import MDScreen kivymd.uix.screen.MDScreen
+#:import MDScreenManager kivymd.uix.screenmanager.MDScreenManager
+#:import MDTopAppBar kivymd.uix.toolbar.MDTopAppBar
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+#:import MDFloatingActionButton kivymd.uix.button.MDFloatingActionButton
+#:import dp kivy.metrics.dp
+#:import SidebarView views.widgets.side_bar.SidebarView
+
+<IconButton@ButtonBehavior+Image>:
+    size_hint: None, None
+    size: dp(30), dp(30)
+    source: ""
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+
+<HomeView>:
+    orientation: 'vertical'
+    md_bg_color: get_color_from_hex("#F5F5F5")
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDTopAppBar:
+            title: "My Tasks"
+            elevation: 0
+            pos_hint: {'top': 1}
+            md_bg_color: get_color_from_hex("#2563EB")
+            specific_text_color: get_color_from_hex("#FFFFFF")
+            left_action_items: [['menu', lambda x: root.toggle_sidebar()]]
+            right_action_items: [['plus', lambda x: root.show_add_task_dialog()]]
+
+        FloatLayout:
+            Label:
+                id: empty_label
+                text: ""
+                opacity: 0
+                size_hint_y: None
+                height: self.texture_size[1]
+                halign: "center"
+
+            MDScrollView:
+                id: scroll_view
+                do_scroll_x: False
+                do_scroll_y: True
+                size_hint: 1, 1
+                bar_width: dp(4)
+                bar_color: get_color_from_hex("#4A3B2C")
+                bar_inactive_color: get_color_from_hex("#CCCCCC")
+                effect_cls: "ScrollEffect"
+                on_scroll_y: root.on_scroll_move(self.scroll_y)
+
+                MDBoxLayout:
+                    id: task_list
+                    orientation: 'vertical'
+                    padding: dp(12)
+                    spacing: dp(12)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+    SidebarView:
+        id: sidebar
+        size_hint_x: None
+        width: dp(280)
+        pos_hint: {'top': 1}
+        x: -self.width
+        elevation: 8

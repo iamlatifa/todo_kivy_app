@@ -1,0 +1,42 @@
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import MDTopAppBar kivymd.uix.toolbar.MDTopAppBar
+#:import MDScrollView kivymd.uix.scrollview.MDScrollView
+
+<CompletedTasksView>:
+    name: 'completed_tasks'
+    
+    FloatLayout:
+        MDBoxLayout:
+            orientation: 'vertical'
+            pos_hint: {'top': 1}
+            size_hint: 1, 1
+            
+            MDTopAppBar:
+                title: "Completed Tasks"
+                anchor_title: "left"
+                md_bg_color: get_color_from_hex("#2563EB")
+                left_action_items: [["arrow-left", lambda x: root.on_back_press()]]
+                elevation: 2
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                #padding: "16dp"
+
+                MDScrollView:
+                    id: scroll_view
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    size_hint: 1, 1
+                    bar_width: dp(4)
+                    bar_color: get_color_from_hex("#4A3B2C")
+                    bar_inactive_color: get_color_from_hex("#CCCCCC")
+                    effect_cls: "ScrollEffect"
+                    on_scroll_y: root.on_scroll_move(self.scroll_y)
+
+                    MDBoxLayout:
+                        id: task_list
+                        orientation: 'vertical'
+                        spacing: dp(8)
+                        padding: dp(8)
+                        size_hint_y: None
+                        height: self.minimum_height 
