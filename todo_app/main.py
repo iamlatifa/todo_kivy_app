@@ -35,12 +35,10 @@ if platform == "android":
     from android.storage import app_storage_path
     os.environ["KIVY_HOME"] = os.path.join(app_storage_path(), ".kivy_user")
 
-# ... rest of your imports and app code
-
 
 from kivy.core.text import LabelBase
 
-# Window.size = (360, 640)
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -212,9 +210,7 @@ class TodoApp(MDApp):
         if os.path.exists("user_session.json"):
             os.remove("user_session.json")
 
-        # Clear fields
-        # self.login_screen.clear_fields()
-        # self.signup_screen.clear_fields()
+        
         self.sm.current = 'login'
 
 
